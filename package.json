@@ -1,0 +1,19 @@
+{
+  "name": "box-office-game",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Blank Check-style Box Office Game: guess the top ten movies at the box office on a given weekend or day.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "express": "^5.3.0"
+  }
+}
