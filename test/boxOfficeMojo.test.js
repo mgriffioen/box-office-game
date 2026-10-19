@@ -52,3 +52,11 @@ test('getChart uses the daily URL and reports missing charts', async () => {
   await assert.rejects(getChart(parseISODate('1990-03-02'), 'daily', { fetchImpl }), ChartNotFoundError);
   assert.deepEqual(urls, ['https://www.boxofficemojo.com/date/1990-03-02/']);
 });
+
+test('getChart explains when an old weekend has no chart', async () => {
+  const fetchImpl = async () => new Response('<html><body><p>No data</p></body></html>');
+  await assert.rejects(getChart(parseISODate('1975-06-20'), 'weekend', { fetchImpl }), {
+    name: 'Error',
+    message: "Box Office Mojo doesn't have a chart for the weekend of Jun 20–22, 1975. Older releases often aren't covered.",
+  });
+});
