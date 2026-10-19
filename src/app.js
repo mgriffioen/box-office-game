@@ -7,7 +7,6 @@ import { dedupeTitles } from '../public/js/match.js';
 import { parseISODate } from './dates.js';
 
 const PUBLIC_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public');
-const EARLIEST_YEAR = 1977;
 
 export function createApp({ mojo = defaultMojo, tmdb = defaultTmdb } = {}) {
   const app = express();
@@ -21,8 +20,8 @@ export function createApp({ mojo = defaultMojo, tmdb = defaultTmdb } = {}) {
     const date = parseISODate(req.query.date);
     const type = req.query.type === 'daily' ? 'daily' : 'weekend';
     if (!date) return res.status(400).json({ error: 'Pick a date (YYYY-MM-DD).' });
-    if (date.getUTCFullYear() < EARLIEST_YEAR || date > new Date()) {
-      return res.status(400).json({ error: `Pick a date between ${EARLIEST_YEAR} and today.` });
+    if (date > new Date()) {
+      return res.status(400).json({ error: 'Pick a date that has already happened.' });
     }
 
     let chart;

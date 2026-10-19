@@ -16,7 +16,7 @@ const cached = createCache();
 
 async function fetchHtml(url, fetchImpl) {
   const res = await fetchImpl(url, { headers: HEADERS });
-  if (res.status === 404) throw new ChartNotFoundError(`No chart found at ${url}`);
+  if (res.status === 404) throw new ChartNotFoundError();
   if (!res.ok) throw new Error(`Box Office Mojo responded with ${res.status} for ${url}`);
   return res.text();
 }
@@ -93,8 +93,18 @@ export function getChart(date, type = 'weekend', { fetchImpl = fetch } = {}) {
   }
 
   return cached(`chart:${url}`, async () => {
-    const entries = parseChart(await fetchHtml(url, fetchImpl));
-    if (!entries.length) throw new ChartNotFoundError(`No box office chart for ${label}.`);
+    let entries = [];
+    try {
+      entries = parseChart(await fetchHtml(url, fetchImpl));
+    } catch (err) {
+      if (!(err instanceof ChartNotFoundError)) throw err;
+    }
+    if (!entries.length) {
+      throw new ChartNotFoundError(
+        `Box Office Mojo doesn't have a chart for ${type === 'daily' ? label : label.replace(/^Weekend/, 'the weekend')}. ` +
+          'Older releases often aren\'t covered.',
+      );
+    }
     return { type, label, startDate, endDate, sourceUrl: url, entries };
   });
 }
