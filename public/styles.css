@@ -71,7 +71,7 @@ body {
 main {
   max-width: 860px;
   margin: 0 auto;
-  padding: 24px 16px 64px;
+  padding: 24px 16px 40px;
 }
 
 h2 {
@@ -479,4 +479,22 @@ button.link {
     height: 32px;
     font-size: 1rem;
   }
+}
+
+.site-footer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 4px 0;
+}
+
+.site-footer a {
+  color: inherit;
 }
